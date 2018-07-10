@@ -16,6 +16,8 @@
  */
 package com.alibaba.dubbo.rpc.protocol.hessian;
 
+import com.alibaba.dubbo.rpc.RpcContext;
+
 /**
  * HessianServiceImpl
  */
@@ -26,6 +28,15 @@ public class HessianServiceImpl implements HessianService {
     public String sayHello(String name) {
         called = true;
         return "Hello, " + name;
+    }
+    
+    public String sayHello(String name, int times) {
+        called = true;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < times; i++) {
+            sb.append("Hello, " + name + ". ");
+        }
+        return sb.toString();
     }
 
     public boolean isCalled() {
@@ -42,6 +53,10 @@ public class HessianServiceImpl implements HessianService {
 
     public String customException() {
         throw new MyException("custom exception");
+    }
+
+    public String context(String name) {
+        return "Hello, " + name + " context, " + RpcContext.getContext().getAttachment("myContext");
     }
 
     static class MyException extends RuntimeException {
